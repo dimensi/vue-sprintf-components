@@ -2,12 +2,28 @@
   "name": "vue-sprintf-components",
   "version": "0.0.1",
   "description": "Replace text with components",
-  "main": "src/index.js",
+  "main": "src/VueSprintfComponents.js",
   "repository": "git@github.com:edDimensi/vue-sprintf-components.git",
-  "author": "Nikita Nafranets <eddimensi@gmail.com>",
+  "author": {
+    "name": "Nikita Nafranets",
+    "email": "eddimensi@gmail.com"
+  },
   "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "bugs": {
+    "url": "https://github.com/edDimensi/vue-root-modals/issues"
+  },
+  "scripts": {
+    "build": "bili",
+    "prepublish": "yarn test && yarn build",
+    "test": "tyu",
+    "test:watch": "tyu -- --watch"
+  },
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.12",
+    "babel-eslint": "^8.2.2",
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.9.0",
