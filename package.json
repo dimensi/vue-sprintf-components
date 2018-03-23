@@ -1,0 +1,25 @@
+{
+  "name": "vue-sprintf-components",
+  "version": "0.0.1",
+  "description": "Replace text with components",
+  "main": "src/index.js",
+  "repository": "git@github.com:edDimensi/vue-sprintf-components.git",
+  "author": "Nikita Nafranets <eddimensi@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@vue/test-utils": "^1.0.0-beta.12",
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.7.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "eslint-plugin-vue": "^4.4.0",
+    "rollup-plugin-clear": "^2.0.7",
+    "rollup-plugin-vue": "^3.0.0",
+    "tyu": "^1.0.6",
+    "vue": "^2.5.16",
+    "vue-server-renderer": "^2.5.16",
+    "vue-template-compiler": "^2.5.16"
+  }
+}
