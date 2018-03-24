@@ -86,4 +86,22 @@ describe('VueSprintfComponents', () => {
 
     expect(wrapper.html()).toBe(resultWithSilent)
   })
+
+  test('Create tons components', () => {
+    for (let x = 0; x < 10; x++) {
+      const wrapper = createMount(testText, {
+        default: [componentFirst(), componentSecond()],
+      })
+      expect(wrapper.html()).toBe(goodResult)
+    }
+
+    for (let x = 0; x < 10; x++) {
+      const wrapper = createMount(testTextWithNamed, {
+        first: componentFirst(),
+        second: componentSecond(),
+      })
+
+      expect(wrapper.html()).toBe(goodResult)
+    }
+  })
 })

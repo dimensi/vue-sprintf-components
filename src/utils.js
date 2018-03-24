@@ -2,6 +2,15 @@ export const createNamedRegexp = () => /%\((\w+)\)c/g
 export const notEnoghtSlots = () => new Error('Not enought slots for placeholders')
 export const createArgsRegexp = () => /%c/g
 
+/**
+ * Function create arr for render from text with placeholders and components
+ *
+ * @param {string} text string with args placeholders `%c`
+ * @param {RegExp} regExp - pattern for search placeholders
+ * @param {[]Object} placeholders array with components
+ * @param {Boolean} silent boolean for disable throw errors
+ * @returns {[][]string}
+ */
 export const arrSprintf = (text, regExp, placeholders, silent) => {
   const splittedText = text.split(regExp)
 
@@ -17,7 +26,15 @@ export const arrSprintf = (text, regExp, placeholders, silent) => {
     return [part, placeholders[index] || '']
   })
 }
-
+/**
+ * Function create arr for render from text with placeholders and components
+ *
+ * @param {string} text string with named placeholders `%(named)c`
+ * @param {RegExp} regExp - pattern for search placeholders
+ * @param {Object<string, any>} placeholders object with components
+ * @param {Boolean} silent boolean for disable throw errors
+ * @returns {[][]string}
+ */
 export const arrSprintfNamed = (text, regExp, placeholders, silent) => {
   const result = []
   let matches
