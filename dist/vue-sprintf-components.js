@@ -1,5 +1,5 @@
 /*!
- * vue-sprintf-components v0.9.2
+ * vue-sprintf-components v0.9.3
  * (c) 2018-present Nikita Nafranets <eddimensi@gmail.com>
  * Released under the MIT License.
  */
@@ -90,9 +90,18 @@
         indexKey++;
       }
 
-      result.push(text.slice(lastIndex, index), {
-        key: key
-      });
+      var slicedText = text.slice(lastIndex, index);
+
+      if (slicedText) {
+        result.push(text.slice(lastIndex, index), {
+          key: key
+        });
+      } else {
+        result.push({
+          key: key
+        });
+      }
+
       lastIndex = regExp.lastIndex;
     }
 
