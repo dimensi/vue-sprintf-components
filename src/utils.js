@@ -28,10 +28,15 @@ export const parseTextOnArray = (text, regExp) => {
       indexKey++
     }
 
-    result.push(
-      text.slice(lastIndex, index),
-      { key }
-    )
+    const slicedText = text.slice(lastIndex, index)
+    if (slicedText) {
+      result.push(
+        text.slice(lastIndex, index),
+        { key }
+      )
+    } else {
+      result.push({ key })
+    }
 
     lastIndex = regExp.lastIndex
   }
