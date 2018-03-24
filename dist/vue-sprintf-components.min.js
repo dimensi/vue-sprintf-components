@@ -1,5 +1,5 @@
 /*!
- * vue-sprintf-components v0.9.0
+ * vue-sprintf-components v0.9.1
  * (c) 2018-present Nikita Nafranets <eddimensi@gmail.com>
  * Released under the MIT License.
  */
