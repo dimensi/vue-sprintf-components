@@ -85,11 +85,25 @@ To render
 component 'a' say: <button>Hello!</button> and component 'b' say: <button>Bye-Bye!</button>
 ```
 
-### With named placeholders + fallback placholders
+### With named placeholders + fallback placeholders
 ```html
 <VueSprintf text="component 'a' say: {a} and component 'b' say: {b}"
   :placeholders="{ b: 'Bye-bye' }">
   <ButtonUi slot="a">
+    Hello!
+  </ButtonUi>
+</VueSprintf>
+```
+To render
+```html
+component 'a' say: <button>Hello!</button> and component 'b' say: Bye-Bye!
+```
+
+### With list placeholders + fallback placeholders
+```html
+<VueSprintf text="component '0' say: {0} and component '1' say: {1}"
+  :placeholders="['Bye-bye']">
+  <ButtonUi>
     Hello!
   </ButtonUi>
 </VueSprintf>
