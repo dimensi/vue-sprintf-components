@@ -3,6 +3,7 @@ import {
   createArgsRegexp,
   createNamedRegexp,
   proccessArrayWithPlaceholders,
+  mergePlaceholders,
 } from '../src/utils'
 
 const testText = 'My testing text with {0} and {1}'
@@ -96,5 +97,33 @@ describe('parsing text', () => {
     const testText = 'My testing text with nothing'
     const result = parseTextOnArray(testText, createArgsRegexp())
     expect(result).toEqual([testText])
+  })
+
+  test('merging slots with placeholders', () => {
+    const slots = { a: '1', b: '2' }
+    const fallback = { c: '3', b: '10' }
+    const result = mergePlaceholders(slots, fallback)
+    expect(result).toEqual({
+      a: '1',
+      b: '2',
+      c: '3',
+    })
+  })
+
+  test('merging children with array', () => {
+    const children = [1, 2, 3]
+    const fallback = [4, 5, 6]
+    const result = mergePlaceholders(children, fallback)
+    expect(result).toEqual([1, 2, 3, 4, 5, 6])
+  })
+
+  test('throw error if placeholders not suitable', () => {
+    const first = () => {
+      const slots = { a: '1', b: '2' }
+      const fallback = [4, 5, 6]
+      return mergePlaceholders(slots, fallback)
+    }
+
+    expect(first).toThrowError('Not suitable placeholders')
   })
 })

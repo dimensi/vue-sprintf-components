@@ -44,70 +44,84 @@ function _nonIterableRest() {
 }
 
 var createNamedRegexp = function createNamedRegexp() {
-  return /%\((\w+)\)c/g;
+  return /\{([a-zA-Z]+)\}/g;
 };
-var notEnoghtSlots = function notEnoghtSlots() {
-  return new Error('Not enought slots for placeholders');
+var notEnoghtPlaceholders = function notEnoghtPlaceholders() {
+  return new Error('Not enought placeholders');
+};
+var notSuitablePlaceholders = function notSuitablePlaceholders() {
+  return new Error('Not suitable placeholders');
 };
 var createArgsRegexp = function createArgsRegexp() {
-  return /%c/g;
+  return /\{(\d)\}/g;
 };
 /**
- * Function create arr for render from text with placeholders and components
+ * Parse text with placeholders on array
  *
- * @param {string} text string with args placeholders `%c`
- * @param {RegExp} regExp - pattern for search placeholders
- * @param {[]Object} placeholders array with components
- * @param {Boolean} silent boolean for disable throw errors
- * @returns {[][]string}
+ * @param {string} text
+ * @param {RegExp} regExp
  */
 
-var arrSprintf = function arrSprintf(text, regExp, placeholders, silent) {
-  var splittedText = text.split(regExp);
-  return splittedText.map(function (part, index) {
-    if (index + 1 === splittedText.length) {
-      return [part];
-    }
+var parseTextOnArray = function parseTextOnArray(text, regExp) {
+  if (!regExp.test(text)) {
+    return [text];
+  }
 
-    if (!placeholders[index] && !silent) {
-      throw notEnoghtSlots();
-    }
-
-    return [part, placeholders[index] || ''];
-  });
-};
-/**
- * Function create arr for render from text with placeholders and components
- *
- * @param {string} text string with named placeholders `%(named)c`
- * @param {RegExp} regExp - pattern for search placeholders
- * @param {Object<string, any>} placeholders object with components
- * @param {Boolean} silent boolean for disable throw errors
- * @returns {[][]string}
- */
-
-var arrSprintfNamed = function arrSprintfNamed(text, regExp, placeholders, silent) {
   var result = [];
   var matches;
-  var lastIndex = 0;
+  regExp.lastIndex = 0;
+  var lastIndex = regExp.lastIndex;
+  var indexKey = 0;
 
   while ((matches = regExp.exec(text)) !== null) {
     var _matches = matches,
         _matches2 = _slicedToArray(_matches, 2),
-        slotKey = _matches2[1];
+        key = _matches2[1];
 
     var _matches3 = matches,
         index = _matches3.index;
 
-    if (!placeholders[slotKey] && !silent) {
-      throw notEnoghtSlots();
+    if (!key) {
+      key = String(indexKey);
+      indexKey++;
     }
 
-    result.push(text.slice(lastIndex, index), placeholders[slotKey]);
+    result.push(text.slice(lastIndex, index), {
+      key: key
+    });
     lastIndex = regExp.lastIndex;
   }
 
   return result;
+};
+/**
+ * Process array with placeholders
+ *
+ * @param {Array[]} tokens - array with text and tokens
+ * @param {any} placeholders - elements on replace
+ * @param {boolean} [silent=false] - don't throw error on undefined
+ * @returns [Array[]]
+ */
+
+var proccessArrayWithPlaceholders = function proccessArrayWithPlaceholders(tokens, placeholders) {
+  var silent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  return tokens.map(function (item) {
+    if (typeof item === 'string') return item;
+    var key = item.key;
+    if (!placeholders[key] && !silent) throw notEnoghtPlaceholders();
+    return placeholders[key];
+  });
+};
+var mergePlaceholders = function mergePlaceholders(original, fallback) {
+  if (!fallback) return original;
+
+  if (Array.isArray(original)) {
+    if (!Array.isArray(fallback)) throw notSuitablePlaceholders();
+    return original.concat(fallback);
+  }
+
+  if (Array.isArray(fallback)) throw notSuitablePlaceholders();
+  return Object.assign({}, fallback, original);
 };
 
 var index = {
@@ -118,6 +132,7 @@ var index = {
         _ref$props = _ref.props,
         text = _ref$props.text,
         silent = _ref$props.silent,
+        placeholders = _ref$props.placeholders,
         slots = _ref.slots;
 
     if (!text) {
@@ -125,19 +140,30 @@ var index = {
     }
 
     if (!createNamedRegexp().test(text)) {
-      return arrSprintf(text, createArgsRegexp(), children, silent);
+      var _tokens = parseTextOnArray(text, createArgsRegexp());
+
+      var _holders = mergePlaceholders(children, placeholders);
+
+      return proccessArrayWithPlaceholders(_tokens, _holders, silent);
     }
 
-    return arrSprintfNamed(text, createNamedRegexp(), slots(), silent);
+    var tokens = parseTextOnArray(text, createNamedRegexp());
+    var holders = mergePlaceholders(slots(), placeholders);
+    return proccessArrayWithPlaceholders(tokens, holders, silent);
   },
   props: {
     /**
-     * String with placeholders %c or %(named)c
+     * String with placeholders {0} or {named}
      */
     text: {
       type: String,
       required: true
     },
+
+    /**
+     * fallback placeholders
+     */
+    placeholders: [Array, Object],
 
     /**
      * Boolean for disable errors

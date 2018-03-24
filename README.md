@@ -19,7 +19,7 @@ npm i vue-sprintf-components
 ```html
 <template>
   <div>
-    <VueSprintf text="component say: %c">
+    <VueSprintf text="component say: {0}">
       <ButtonUi>
         Hello!
       </ButtonUi>
@@ -47,15 +47,17 @@ The component takes 2 props: `text` and `silence`
 * text
   * type: `String`
   * required: `true`  
-Any string with placeholders `%c` and named placeholders `%(name)c`
+Any string with placeholders `{0}` and named placeholders `{name}`
 * silence
   * type: `Boolean`  
 If silence false, if there are not enough slots for placeholders, there will be an error
-
+* placeholders
+  * type: `Array|Object`  
+Fallback placeholders if slots not enoght
 ## Example
 ### With args placeholders
 ```html
-<VueSprintf text="component say: %c">
+<VueSprintf text="component say: {0}">
   <ButtonUi>
     Hello!
   </ButtonUi>
@@ -69,7 +71,7 @@ component say: <button>Hello!</button>
 
 ### With named placeholders
 ```html
-<VueSprintf text="component 'a' say: %(a)c and component 'b' say: %(b)c">
+<VueSprintf text="component 'a' say: {a} and component 'b' say: {b}">
   <ButtonUi slot="a">
     Hello!
   </ButtonUi>
@@ -81,4 +83,18 @@ component say: <button>Hello!</button>
 To render
 ```html
 component 'a' say: <button>Hello!</button> and component 'b' say: <button>Bye-Bye!</button>
+```
+
+### With named placeholders + fallback placholders
+```html
+<VueSprintf text="component 'a' say: {a} and component 'b' say: {b}"
+  :placeholders="{ b: 'Bye-bye' }">
+  <ButtonUi slot="a">
+    Hello!
+  </ButtonUi>
+</VueSprintf>
+```
+To render
+```html
+component 'a' say: <button>Hello!</button> and component 'b' say: Bye-Bye!
 ```

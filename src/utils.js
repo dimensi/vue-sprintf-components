@@ -1,5 +1,6 @@
 export const createNamedRegexp = () => /\{([a-zA-Z]+)\}/g
 export const notEnoghtPlaceholders = () => new Error('Not enought placeholders')
+export const notSuitablePlaceholders = () => new Error('Not suitable placeholders')
 export const createArgsRegexp = () => /\{(\d)\}/g
 
 /**
@@ -53,3 +54,15 @@ export const proccessArrayWithPlaceholders = (tokens, placeholders, silent = fal
     if (!placeholders[key] && !silent) throw notEnoghtPlaceholders()
     return placeholders[key]
   })
+
+export const mergePlaceholders = (original, fallback) => {
+  if (!fallback) return original
+  if (Array.isArray(original)) {
+    if (!Array.isArray(fallback)) throw notSuitablePlaceholders()
+
+    return original.concat(fallback)
+  }
+
+  if (Array.isArray(fallback)) throw notSuitablePlaceholders()
+  return Object.assign({}, fallback, original)
+}

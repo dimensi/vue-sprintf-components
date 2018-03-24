@@ -27,12 +27,13 @@ const resultWithSilent = '<div>My testing text with <h1>Component First</h1> and
 
 const notEnoughtSlots = 'Not enought placeholders'
 
-const createMount = (text, slots, silent = false) =>
+const createMount = (text, slots, silent = false, otherprops = {}) =>
   mount(componentWrap(VueSprintfComponents), {
     context: {
       props: {
         text,
         silent,
+        ...otherprops,
       },
     },
     slots,
@@ -114,5 +115,26 @@ describe('VueSprintfComponents', () => {
 
       expect(wrapper.html()).toBe(goodResult)
     }
+  })
+
+  test('testing fallback placeholders', () => {
+    const namedWrapper = () => createMount(testTextWithNamed, {
+      first: componentFirst(),
+    }, false, {
+      placeholders: {
+        second: 'Second placeholder',
+      },
+    })
+
+    const argsWrapper = () => createMount(testText, {
+      default: [componentFirst()],
+    }, false, {
+      placeholders: ['Second placeholder'],
+    })
+
+    const bestResult = '<div>My testing text with <h1>Component First</h1> and Second placeholder</div>'
+
+    expect(namedWrapper().html()).toBe(bestResult)
+    expect(argsWrapper().html()).toBe(bestResult)
   })
 })
