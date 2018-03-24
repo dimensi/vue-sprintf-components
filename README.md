@@ -110,5 +110,5 @@ component 'a' say: <button>Hello!</button> and component 'b' say: Bye-Bye!
 ```
 To render
 ```html
-component 'a' say: <button>Hello!</button> and component 'b' say: Bye-Bye!
+component '0' say: <button>Hello!</button> and component '1' say: Bye-Bye!
 ```
