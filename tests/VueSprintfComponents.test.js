@@ -40,11 +40,19 @@ const createMount = (text, slots, silent = false) =>
   })
 
 describe('VueSprintfComponents', () => {
+  test('Do nothing on empty string', () => {
+    const wrapper = createMount()
+    const sprintfComp = wrapper.find(VueSprintfComponents)
+    expect(sprintfComp.exists()).toBe(false)
+  })
+
   test('Work with default slots', () => {
     const wrapper = createMount(testText, {
       default: [componentFirst(), componentSecond()],
     })
     expect(wrapper.html()).toBe(goodResult)
+    const sprintfComp = wrapper.find(VueSprintfComponents)
+    expect(sprintfComp.exists()).toBe(true)
   })
 
   test('Throw error if slots not enogth', () => {
@@ -69,6 +77,9 @@ describe('VueSprintfComponents', () => {
     })
 
     expect(wrapper.html()).toBe(goodResult)
+
+    const sprintfComp = wrapper.find(VueSprintfComponents)
+    expect(sprintfComp.exists()).toBe(true)
   })
 
   test('Throw error if named slots not enogth', () => {
