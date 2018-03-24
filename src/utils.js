@@ -35,6 +35,10 @@ export const parseTextOnArray = (text, regExp) => {
 
     lastIndex = regExp.lastIndex
   }
+  const tailText = text.slice(lastIndex, text.length)
+  if (tailText) {
+    result.push(tailText)
+  }
 
   return result
 }

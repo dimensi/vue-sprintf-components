@@ -7,6 +7,7 @@ import {
 } from '../src/utils'
 
 const testText = 'My testing text with {0} and {1}'
+const testText2 = 'My {0} text'
 const testTextWithNamed = 'My testing text with {first} and {second}'
 const goodResultForParseText = ['My testing text with ', { key: '0' }, ' and ', { key: '1' }]
 
@@ -15,6 +16,11 @@ describe('parsing text', () => {
     const result = parseTextOnArray(testText, createArgsRegexp())
     expect(result).toEqual(
       goodResultForParseText
+    )
+
+    const result2 = parseTextOnArray(testText2, createArgsRegexp())
+    expect(result2).toEqual(
+      ['My ', {key: '0'}, ' text']
     )
   })
 
