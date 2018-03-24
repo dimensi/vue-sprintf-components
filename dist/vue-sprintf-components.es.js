@@ -1,5 +1,5 @@
 /*!
- * vue-sprintf-components v0.1.0
+ * vue-sprintf-components v0.8.0
  * (c) 2018-present Nikita Nafranets <eddimensi@gmail.com>
  * Released under the MIT License.
  */
@@ -50,6 +50,16 @@ var notEnoghtSlots = function notEnoghtSlots() {
 var createArgsRegexp = function createArgsRegexp() {
   return /%c/g;
 };
+/**
+ * Function create arr for render from text with placeholders and components
+ *
+ * @param {string} text string with args placeholders `%c`
+ * @param {RegExp} regExp - pattern for search placeholders
+ * @param {[]Object} placeholders array with components
+ * @param {Boolean} silent boolean for disable throw errors
+ * @returns {[][]string}
+ */
+
 var arrSprintf = function arrSprintf(text, regExp, placeholders, silent) {
   var splittedText = text.split(regExp);
   return splittedText.map(function (part, index) {
@@ -64,6 +74,16 @@ var arrSprintf = function arrSprintf(text, regExp, placeholders, silent) {
     return [part, placeholders[index] || ''];
   });
 };
+/**
+ * Function create arr for render from text with placeholders and components
+ *
+ * @param {string} text string with named placeholders `%(named)c`
+ * @param {RegExp} regExp - pattern for search placeholders
+ * @param {Object<string, any>} placeholders object with components
+ * @param {Boolean} silent boolean for disable throw errors
+ * @returns {[][]string}
+ */
+
 var arrSprintfNamed = function arrSprintfNamed(text, regExp, placeholders, silent) {
   var result = [];
   var matches;
@@ -98,6 +118,10 @@ var index = {
         silent = _ref$props.silent,
         slots = _ref.slots;
 
+    if (!text) {
+      return '';
+    }
+
     if (!createNamedRegexp().test(text)) {
       return arrSprintf(text, createArgsRegexp(), children, silent);
     }
@@ -105,10 +129,17 @@ var index = {
     return arrSprintfNamed(text, createNamedRegexp(), slots(), silent);
   },
   props: {
+    /**
+     * String with placeholders %c or %(named)c
+     */
     text: {
       type: String,
       required: true
     },
+
+    /**
+     * Boolean for disable errors
+     */
     silent: Boolean
   }
 };
