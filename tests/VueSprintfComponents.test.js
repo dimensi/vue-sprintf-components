@@ -20,12 +20,12 @@ const componentSecond = () => ({
   render: h => <h2>Component Second</h2>,
 })
 
-const testText = 'My testing text with %c and %c'
-const testTextWithNamed = 'My testing text with %(first)c and %(second)c'
+const testText = 'My testing text with {0} and {1}'
+const testTextWithNamed = 'My testing text with {first} and {second}'
 const goodResult = '<div>My testing text with <h1>Component First</h1> and <h2>Component Second</h2></div>'
 const resultWithSilent = '<div>My testing text with <h1>Component First</h1> and </div>'
 
-const notEnoughtSlots = 'Not enought slots for placeholders'
+const notEnoughtSlots = 'Not enought placeholders'
 
 const createMount = (text, slots, silent = false) =>
   mount(componentWrap(VueSprintfComponents), {
@@ -49,7 +49,7 @@ describe('VueSprintfComponents', () => {
   test('Work with default slots', () => {
     const wrapper = createMount(testText, {
       default: [componentFirst(), componentSecond()],
-    })
+    }, true)
     expect(wrapper.html()).toBe(goodResult)
     const sprintfComp = wrapper.find(VueSprintfComponents)
     expect(sprintfComp.exists()).toBe(true)

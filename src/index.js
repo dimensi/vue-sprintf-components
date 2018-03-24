@@ -1,8 +1,8 @@
 import {
   createArgsRegexp,
   createNamedRegexp,
-  arrSprintfNamed,
-  arrSprintf,
+  parseTextOnArray,
+  proccessArrayWithPlaceholders,
 } from './utils'
 
 export default {
@@ -14,10 +14,13 @@ export default {
     }
 
     if (!createNamedRegexp().test(text)) {
-      return arrSprintf(text, createArgsRegexp(), children, silent)
+      const tokens = parseTextOnArray(text, createArgsRegexp())
+      const result = proccessArrayWithPlaceholders(tokens, children, silent)
+      return result
     }
 
-    return arrSprintfNamed(text, createNamedRegexp(), slots(), silent)
+    const tokens = parseTextOnArray(text, createNamedRegexp())
+    return proccessArrayWithPlaceholders(tokens, slots(), silent)
   },
   props: {
     /**
@@ -27,6 +30,8 @@ export default {
       type: String,
       required: true,
     },
+
+    placeholders: [Array, Object],
     /**
      * Boolean for disable errors
      */
